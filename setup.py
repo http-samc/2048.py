@@ -30,7 +30,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="Py2048-Engine",
-    version="0.1.0",
+    version="1.0.0",
     description="A pure Python 2048 engine, based on the original game!",
     url="https://github.com/http-samc/2048.py",
     author="Samarth Chitgopekar",
