@@ -16,7 +16,8 @@
             - If no tiles can be combined AND all spots in the grid are taken (!None) the user LOSES.
             - If any tile has the value of '2048', the user WINS.
         
-        2) A tile is generated and added to a spot on the grid 
+        2) A tile is generated and added to a spot on the grid
+            - The generated tile is either '2' (P = 0.9) or '4' (P = 0.1) 
 """
 
 from random import choices

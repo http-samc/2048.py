@@ -1,9 +1,14 @@
 from typing import List
 
-class GameWonException(Exception):
-    """Exception raised when user wins a Game."""
+from utils.GameException import GameException
 
-    board: List[List[int]]
+class GameWonException(Exception):
+    """Exception raised when user loses a Game.
+    
+    Inherits: GameException
+
+    Noninherited Attrs: None
+    """
 
     def __init__(self, board: List[List[int]], numMoves: int, message: str = "Game won - a tile with the value 2048 reached!") -> None:
         """Exception raised when a user wins a Game a tile (position in the board) has a value of 2048.
@@ -14,8 +19,4 @@ class GameWonException(Exception):
             message (str, optional): a description of the exception. Defaults to "Game won - a tile with the value 2048 reached!".
         """
 
-        self.board = board
-        self.numMoves = numMoves
-        self.message = message
-        
-        super().__init__(message)
+        super().__init__(board, numMoves, message)

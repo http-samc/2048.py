@@ -1,9 +1,14 @@
 from typing import List
 
-class GameLostException(Exception):
-    """Exception raised when user loses a Game."""
+from utils.GameException import GameException
 
-    board: List[List[int]]
+class GameLostException(GameException):
+    """Exception raised when user loses a Game.
+    
+    Inherits: GameException
+
+    Noninherited Attrs: None
+    """
 
     def __init__(self, board: List[List[int]], numMoves: int, message: str = "Game lost - no blank spaces left and no tile combinations left!") -> None:
         """Exception raised when a user loses a Game (no 'None' spaces left and no tiles can be combined)
@@ -13,9 +18,5 @@ class GameLostException(Exception):
             numMoves (int): the number of moves taken before the exception was thrown.
             message (str, optional): a description of the exception. Defaults to "Game lost - no blank spaces left and no tile combinations left!".
         """
-
-        self.board = board
-        self.numMoves = numMoves
-        self.message = message
         
-        super().__init__(message)
+        super().__init__(board, numMoves, message)
