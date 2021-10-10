@@ -15,6 +15,7 @@ class GameLostException(Exception):
         """
 
         self.board = board
+        self.numMoves = numMoves
         self.message = message
         
         super().__init__(message)

@@ -22,25 +22,75 @@
 from random import choices
 from typing import List, Tuple
 
-from utils.Constants import LEFT, RIGHT, UP, DOWN
 from utils.GameLostException import GameLostException
 from utils.GameWonException import GameWonException
 
 class Game:
-    "Programatic representation of the game 2048 and its logic"
+    """Programatic representation of the game 2048 and its logic
+    
+    Attrs:
+        LEFT (str): Movement constant for the 'left' direction, set as "left".
+        RIGHT (str): Movement constant for the 'right' direction, set as "right".
+        UP (str): Movement constant for the 'up' direction, set as "up".
+        DOWN (str): Movement constant for the 'down' direction, set as "down".
 
-    population: List[int] = [2, 4] # Possible choices for random tile generation 
-    weights: List[float] = [0.9, 0.1] # Probabilities for corresponding indicies in Game.population
+        POPULATION (List[int]): Possible choices for random tile generation.
+        WEIGHTS (List[float]): Probabilities for corresponding indicies in Game.POPULATION
+
+        board (List[List[int]]): Game board represented by a 2D array of integers.
+        numMoves (int): The amount of moves currently taken. Starts at 0.
+        hasOpenSpace (bool): Whether or not the current board has any open spaces.
+    """
+
+    POPULATION: List[int] = [2, 4]
+    WEIGHTS: List[float] = [0.9, 0.1]
+
+    LEFT: str = "left"
+    RIGHT: str = "right"
+    UP: str = "up"
+    DOWN: str = "down"
 
     board: List[List[int]] # Game board
     numMoves: int = 0 # Number of moves taken
     hasOpenSpace: bool = True # Whether or not we have an open space, controlled by Game._canContinue()
 
-    def __init__(self) -> None:
-        """Creates a 2048 Game Instance"""
+    """
+        Dunder methods
+    """
 
-        self._generateBoard()
-    
+    def __init__(self, startingBoard: List[List[int]] = None) -> None:
+        """Generates a 2048 game instance.
+
+        Args:
+            startingBoard (List[List[int]], optional): A custom board to start from. Defaults to None (new game).
+        """
+
+        if startingBoard:
+            self.board = startingBoard
+        else:
+            self._generateBoard()
+
+    def __repr__(self) -> str:
+        """
+            Generates a more viewable representation of the current value
+            of self.board.
+
+            Equally spaces items in grid, replaces 'None' with '-'.
+        """
+
+        # Credit: https://stackoverflow.com/questions/13214809/pretty-print-2d-list
+
+        s: List[List[str]] = [[str(e) if e is not None else " " for e in row] for row in self.board]
+        lens: List[int] = [max(map(len, col)) for col in zip(*s)]
+        fmt: str = '\t'.join('{{:{}}}'.format(x) for x in lens)
+        table: List[str] = [fmt.format(*row) for row in s]
+        
+        return '\n'.join(table)
+
+    """
+        Private helper methods
+    """
+
     def _getTouchingPositions(self, position: Tuple[int]) -> List[Tuple[int]]:
         """Returns all positions of 'touching' tiles
         relative to a given position.
@@ -157,7 +207,7 @@ class Game:
         tileCol: int
 
         tileRow, tileCol = choices(blankTilePositions)[0]
-        tileValue: int = choices(Game.population, Game.weights)[0]
+        tileValue: int = choices(Game.POPULATION, Game.WEIGHTS)[0]
 
         # Updating board with random tile
         self.board[tileRow][tileCol] = tileValue
@@ -185,54 +235,48 @@ class Game:
         Args:
             array (List[int]): the input array.
             direction (str): the direction of compression, represented by the
-            constants (import from utils.Constants): LEFT, RIGHT, UP, DOWN.
+            class constants: LEFT, RIGHT, UP, DOWN.
 
         Returns:
             List[int]: the compressed array.
         """
         
+        # Temp remove all None values
         filteredArray:  List[int] = [elem for elem in array if not elem is None]
 
-        # Handle compression w/ like neighboring values
+        # Temp reverse to standardize compression direction
+        if direction == self.DOWN or direction == self.RIGHT:
+            filteredArray = list(reversed(filteredArray))
 
-        i: int = 0 # use explicit idx instead of enumerate() since we want to change it
-        for val in filteredArray:
+        # Iterate over filtered array
+        for i, val in enumerate(filteredArray):
 
-            if i+1 >= len(filteredArray): # end of arr so break
+            # No more comparisons
+            if i+1 >= len(filteredArray):
                 break
-
-            if val == filteredArray[i+1]: # we have a dupe @ next pos
-                
-                # Compression-direction specific manipulations
-
-                if direction == LEFT or direction == UP:
-                    filteredArray[i] = 2*val # set curr val to double
-                    filteredArray.pop(i+1) # remove next val
-                
-                elif direction == RIGHT or direction == DOWN:
-                    filteredArray[i+1] = 2*val # set next val to double
-                    filteredArray.pop(i+1) # remove curr val
-                
-                i -= 1 # we decr len(arr) by 1 so lower i
-
-            i += 1 # next pos
-
-        # if None not in array: # DO THIS AFTER COMPRESSING
-        #     return array # Array is full so can't be compressed
+            
+            # Our curr elem = our next elem -> we can compress
+            if val == filteredArray[i+1]:
+                filteredArray[i] = 2*val # Double our current value
+                filteredArray.pop(i+1) # Remove our next value
+            
+        # Reintroduce original compression direction if applicable
+        if direction == self.DOWN or direction == self.RIGHT:
+            filteredArray = list(reversed(filteredArray))
 
         # Reintroduce None values
-        if direction == LEFT or direction == UP:
+        if direction == self.LEFT or direction == self.UP:
             compressedArray: List[int] = filteredArray
             
             for _ in range(4-len(filteredArray)):
                 compressedArray.append(None)
-        
-        elif direction == RIGHT or direction == DOWN:
+
+        elif direction == self.RIGHT or direction == self.DOWN:
             compressedArray: List[int] = filteredArray
             
             for _ in range(4-len(filteredArray)):
                 compressedArray.insert(0, None)    
-                
+                    
         return compressedArray
 
     def _move(self, direction: str) -> None:
@@ -240,7 +284,7 @@ class Game:
 
         Args:
             direction (str): The direction to move, represented by the
-            constants (import from utils.Constants): LEFT, RIGHT, UP, DOWN.
+            class constants: LEFT, RIGHT, UP, DOWN.
         """
 
         self._canContinue()
@@ -264,51 +308,69 @@ class Game:
         
         if self.hasOpenSpace:
             self._placeRandomTile()
+        
+        self.numMoves += 1
 
+    """
+        Public methods
+    """
+    
+    # Movement methods
     def left(self) -> None:
         """
-            Moves left.
+            Simulates a 'left' arrow key/swipe on the board.
+
+            Can raise a GameWonException or a GameLostException
+            if the function call's corresponding movement triggers it.
         """
 
-        self._move(LEFT)
+        self._move(self.LEFT)
 
     def right(self) -> None:
         """
-            Moves right.
+            Simulates a 'right' key/swipe on the board.
+
+            Can raise a GameWonException or a GameLostException
+            if the function call's corresponding movement triggers it.
         """
 
-        self._move(RIGHT)
+        self._move(self.RIGHT)
 
     def up(self) -> None:
         """
-            Moves up.
+            Simulates a 'up' key/swipe on the board.
+
+            Can raise a GameWonException or a GameLostException
+            if the function call's corresponding movement triggers it.
         """
 
-        self._move(UP)
+        self._move(self.UP)
 
     def down(self) -> None:
         """
-            Moves down.
+            Simulates a 'down' key/swipe on the board.
+
+            Can raise a GameWonException or a GameLostException
+            if the function call's corresponding movement triggers it.
         """
 
-        self._move(DOWN)
+        self._move(self.DOWN)
 
-    def __repr__(self) -> str:
+    # Getters
+    def getBoard(self) -> List[List[int]]:
+        """Getter for the current game board.
+
+        Returns:
+            List[List[int]]: The current game board.
         """
-            Generates a more viewable representation of the current value
-            of self.board.
 
-            Equally spaces items in grid, replaces 'None' with '-'.
+        return self.board
+    
+    def getNumMoves(self) -> int:
+        """Getter for the current number of moves.
+
+        Returns:
+            int: The current number of moves.
         """
 
-        # Credit: https://stackoverflow.com/questions/13214809/pretty-print-2d-list
-
-        s: List[List[str]] = [[str(e) if e is not None else " " for e in row] for row in self.board]
-        lens: List[int] = [max(map(len, col)) for col in zip(*s)]
-        fmt: str = '\t'.join('{{:{}}}'.format(x) for x in lens)
-        table: List[str] = [fmt.format(*row) for row in s]
-        
-        return '\n'.join(table)
-
-if __name__ == "__main__":
-    ...
+        return self.numMoves
