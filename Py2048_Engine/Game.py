@@ -49,7 +49,7 @@ from Py2048_Engine.Exceptions import GameLostException
 from Py2048_Engine.Exceptions import GameWonException
 
 class Game:
-    
+
     """Programatic representation of the game 2048 and its logic
 
     Attrs:

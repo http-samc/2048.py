@@ -13,7 +13,7 @@ Alternatively, you can clone the repo:
 
 ## Getting Started
 
-### If you're looking to play the game itself:
+### If you're looking to play the game itself
 You can get a quick and intuivite introduction to the engine by using the built-in game tester. First import `runTest()` from the package and call it to get started.
 ```Python
 >>> from Py2048_Engine.Test import runTest
@@ -21,7 +21,7 @@ You can get a quick and intuivite introduction to the engine by using the built-
 ```
 
 You'll be given a printout of the board, a 4 by 4 grid. All 'empty' spaces have a `-`. From here, you are in a loop of being able to move in any direction.
-```
+```Python
 -       -       -       4
 -       -       -       -
 -       -       2       -
@@ -45,8 +45,7 @@ Choice: 1
 
 Eventually, you'll get a printout when you win or lose.
 
-
-### If you want to implement the engine in a project:
+### If you want to implement the engine in a project
 
 First, import the game class from `Py2048_Engine.Game`. Then, you can create a game like:
 

@@ -204,4 +204,3 @@ Args:
     message (str, optional): a description of the exception. Defaults to "Game lost - no blank spaces left and no tile combinations left!".
 ```
 </p></details>
-
