@@ -1,6 +1,8 @@
 # Py2048-Engine
 A pure 🐍 , fully type hinted, well documented 2048 Engine that just works.
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/580e4c8cf7554264b44faa7216479cbe)](https://www.codacy.com/gh/http-samc/2048.py/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=http-samc/2048.py&amp;utm_campaign=Badge_Grade) [![PyPI version](https://badge.fury.io/py/Py2048-Engine.svg)](https://badge.fury.io/py/Py2048-Engine)
+
 ## Installation
 
 First, install `Py2048-Engine`.
@@ -36,7 +38,7 @@ Choose a movement:
 Choice: 1
 ```
 *Many moves later...*
-```
+```Python
 32      -       -       -
 -       -       4       -
 2       -       -       -
