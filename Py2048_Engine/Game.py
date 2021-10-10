@@ -1,4 +1,26 @@
 """
+    Game.py 10/10/2021
+    MIT License
+
+    Copyright (c) 2021 http-samc
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+"""
+
+"""
     We can represent 2048 as a 2 dimensional array forming a 4 x 4 grid.
 
     Each 'position' will be an integer value representing the current value
@@ -23,8 +45,8 @@
 from random import choices
 from typing import List, Tuple
 
-from utils.GameLostException import GameLostException
-from utils.GameWonException import GameWonException
+from Py2048_Engine.Exceptions import GameLostException
+from Py2048_Engine.Exceptions import GameWonException
 
 class Game:
     """Programatic representation of the game 2048 and its logic
@@ -81,7 +103,7 @@ class Game:
 
         # Credit: https://stackoverflow.com/questions/13214809/pretty-print-2d-list
 
-        s: List[List[str]] = [[str(e) if e is not None else " " for e in row] for row in self.board]
+        s: List[List[str]] = [[str(e) if e is not None else "-" for e in row] for row in self.board]
         lens: List[int] = [max(map(len, col)) for col in zip(*s)]
         fmt: str = '\t'.join('{{:{}}}'.format(x) for x in lens)
         table: List[str] = [fmt.format(*row) for row in s]
@@ -92,7 +114,7 @@ class Game:
         Private helper methods
     """
 
-    def _getTouchingPositions(self, position: Tuple[int]) -> List[Tuple[int]]:
+    def _getTouchingPositions(self, position: Tuple[int, int]) -> List[Tuple[int, int]]:
         """Returns all positions of 'touching' tiles
         relative to a given position.
 
@@ -115,14 +137,14 @@ class Game:
         row, col = position
 
         # Possible positions of touching tiles (not all guarenteed to exist)
-        possibleTouchingPositions: List[Tuple[int]] = [
+        possibleTouchingPositions: List[Tuple[int, int]] = [
             (row+1, col),
             (row-1, col),
             (row, col+1),
             (row, col-1)
         ]
 
-        touchingPositions: List[Tuple[int]] = []
+        touchingPositions: List[Tuple[int, int]] = []
 
         # Find out applicable touching positions
         for row, col in possibleTouchingPositions:
@@ -172,7 +194,7 @@ class Game:
         for row, _ in enumerate(self.board):
             for col, val in enumerate(_):
 
-                touchingPositions: List[Tuple[int]] = self._getTouchingPositions((row, col))
+                touchingPositions: List[Tuple[int, int]] = self._getTouchingPositions((row, col))
 
                 # Check if any of the other touching positions match current value
                 for row, col in touchingPositions:
@@ -191,6 +213,8 @@ class Game:
             Returns: None
         """
 
+        # Credit: https://www.ripublication.com/aama17/aamav12n1_01.pdf for probability distributions
+        
         # Because of preprocessing done by Game._canContinue(), we
         # are guarenteed >= 1 blankTilePosition if this method runs
         # b/c it is only called if self.hasOpenSpace
@@ -290,12 +314,12 @@ class Game:
 
         self._canContinue()
         
-        if direction == LEFT or direction == RIGHT:
+        if direction == self.LEFT or direction == self.RIGHT:
             for i, row in enumerate(self.board):
                 self.board[i] = self._compressArray(row, direction)
 
         
-        elif direction == DOWN or direction == UP:
+        elif direction == self.DOWN or direction == self.UP:
             for col in range(4):
                 column: List[int] = []
 
