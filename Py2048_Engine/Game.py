@@ -157,8 +157,8 @@ class Game:
         """
             Always Ran before Game._placeRandomTile() (except for during board initialization).
             
-            Throws utils.GameWonException() if a tile on self.board has a value of '2048'.
-            Throws utils.GameLostException() IFF both of the following are met:
+            Throws GameWonException() if a tile on self.board has a value of '2048'.
+            Throws GameLostException() IFF both of the following are met:
                 1) all tiles are filled (no values on self.board are 'None')
                 2) no tiles of the same value 'touch'
                     2.i) given position {r, c} with row = r and column = c, touching tiles
