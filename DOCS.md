@@ -35,7 +35,7 @@ Args:
     (row, col) on self.board.
 
 Returns:
-    List[Tuple[int]]: a list of tuples representing 
+    List[Tuple[int]]: a list of tuples representing
     positions in the format (row, col) on self.board.
 ```
 #### Game.`_canContinue`

@@ -1,5 +1,5 @@
 # Py2048-Engine
-A pure 🐍 , fully type hinted, well documented 2048 Engine.
+A pure 🐍 , fully type hinted, well documented 2048 Engine that just works.
 
 ## Installation
 
@@ -13,7 +13,7 @@ Alternatively, you can clone the repo:
 
 ## Getting Started
 
-### If you're looking to play the game itself...
+### If you're looking to play the game itself:
 You can get a quick and intuivite introduction to the engine by using the built-in game tester. First import `runTest()` from the package and call it to get started.
 ```Python
 >>> from Py2048_Engine.Test import runTest
@@ -46,7 +46,7 @@ Choice: 1
 Eventually, you'll get a printout when you win or lose.
 
 
-### If you want to implement the engine in a project...
+### If you want to implement the engine in a project:
 
 First, import the game class from `Py2048_Engine.Game`. Then, you can create a game like:
 
@@ -104,17 +104,17 @@ while True:
 
         if type(e) is GameWonException:
             print("YOU WON!!!")
-        
+
         elif type(e) is GameLostException:
             print("Better luck next time :(")
-        
+
         print(e.message)
         print(f"Finished in {e.numMoves} moves.")
         print(f"Final board:\n{e.finalBoard}")
 ```
 
-## Questions?
+## Questions
 See the full docs at [DOCS.md](https://github.com/http-samc/2048.py/blob/main/DOCS.md). If you have any other questions, feel free to contact the author, [Samarth Chitgopekar](mailto:sam@chitgopekar.tech)!
 
-## Special Thanks
+## Indirect Contributors
 Thanks to [this](https://stackoverflow.com/questions/13214809/pretty-print-2d-list) post's marked answer on Stack Overflow for some help on `Game.__repr__()` and Bhargavi Goel's 2017 [paper](https://www.ripublication.com/aama17/aamav12n1_01.pdf) on the mathematics behind 2048, which helped me create this engine!

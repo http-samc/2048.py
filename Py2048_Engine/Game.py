@@ -37,9 +37,9 @@
         Rightmost for right).
             - If no tiles can be combined AND all spots in the grid are taken (!None) the user LOSES.
             - If any tile has the value of '2048', the user WINS.
-        
+
         2) A tile is generated and added to a spot on the grid
-            - The generated tile is either '2' (P = 0.9) or '4' (P = 0.1) 
+            - The generated tile is either '2' (P = 0.9) or '4' (P = 0.1)
 """
 
 from random import choices
@@ -49,8 +49,9 @@ from Py2048_Engine.Exceptions import GameLostException
 from Py2048_Engine.Exceptions import GameWonException
 
 class Game:
-    """Programatic representation of the game 2048 and its logic
     
+    """Programatic representation of the game 2048 and its logic
+
     Attrs:
         LEFT (str): Movement constant for the 'left' direction, set as "left".
         RIGHT (str): Movement constant for the 'right' direction, set as "right".
@@ -107,7 +108,7 @@ class Game:
         lens: List[int] = [max(map(len, col)) for col in zip(*s)]
         fmt: str = '\t'.join('{{:{}}}'.format(x) for x in lens)
         table: List[str] = [fmt.format(*row) for row in s]
-        
+
         return '\n'.join(table)
 
     """
@@ -128,7 +129,7 @@ class Game:
             (row, col) on self.board.
 
         Returns:
-            List[Tuple[int]]: a list of tuples representing 
+            List[Tuple[int]]: a list of tuples representing
             positions in the format (row, col) on self.board.
         """
 
@@ -150,20 +151,20 @@ class Game:
         for row, col in possibleTouchingPositions:
             if row >= 0 and row < 4 and col >= 0 and col < 4:
                 touchingPositions.append((row, col))
-        
+
         return touchingPositions
 
     def _canContinue(self) -> None:
         """
             Always Ran before Game._placeRandomTile() (except for during board initialization).
-            
+
             Throws GameWonException() if a tile on self.board has a value of '2048'.
             Throws GameLostException() IFF both of the following are met:
                 1) all tiles are filled (no values on self.board are 'None')
                 2) no tiles of the same value 'touch'
                     2.i) given position {r, c} with row = r and column = c, touching tiles
                     are at (assuming they exist) {r+1, c}, {r-1, c}, {r, c+1}, {r, c-1}
-            
+
             Returns: None
         """
 
@@ -182,11 +183,11 @@ class Game:
 
                 elif val == 2048:
                     raise GameWonException(self.board, self.numMoves) # Handle Game Win
-        
+
         if hasBlankTile:
             self.hasOpenSpace = True # update instance-level tracker
             return # Handle known playable game (>= 1 empty space)
-        
+
         self.hasOpenSpace = False # update instance-level tracker
 
         # If we have no empty tiles we need to check for touching tiles to confirm playability
@@ -200,7 +201,7 @@ class Game:
                 for row, col in touchingPositions:
                     if val == self.board[row][col]:
                         return # If the user has at least one potential move, we can continue
-        
+
         # If we've made it this far without a return, both conditions for game loss
         # (no empty tiles & no possible moves) have been met and we need to raise GameLostException
         raise GameLostException(self.board, self.numMoves)
@@ -214,7 +215,7 @@ class Game:
         """
 
         # Credit: https://www.ripublication.com/aama17/aamav12n1_01.pdf for probability distributions
-        
+
         # Because of preprocessing done by Game._canContinue(), we
         # are guarenteed >= 1 blankTilePosition if this method runs
         # b/c it is only called if self.hasOpenSpace
@@ -226,7 +227,7 @@ class Game:
 
                 if self.board[row][col] is None:
                     blankTilePositions.append((row, col))
-        
+
         # Getitng random tile's value and position
         tileRow: int
         tileCol: int
@@ -265,7 +266,7 @@ class Game:
         Returns:
             List[int]: the compressed array.
         """
-        
+
         # Temp remove all None values
         filteredArray:  List[int] = [elem for elem in array if not elem is None]
 
@@ -279,12 +280,12 @@ class Game:
             # No more comparisons
             if i+1 >= len(filteredArray):
                 break
-            
+
             # Our curr elem = our next elem -> we can compress
             if val == filteredArray[i+1]:
                 filteredArray[i] = 2*val # Double our current value
                 filteredArray.pop(i+1) # Remove our next value
-            
+
         # Reintroduce original compression direction if applicable
         if direction == self.DOWN or direction == self.RIGHT:
             filteredArray = list(reversed(filteredArray))
@@ -292,16 +293,16 @@ class Game:
         # Reintroduce None values
         if direction == self.LEFT or direction == self.UP:
             compressedArray: List[int] = filteredArray
-            
+
             for _ in range(4-len(filteredArray)):
                 compressedArray.append(None)
 
         elif direction == self.RIGHT or direction == self.DOWN:
             compressedArray: List[int] = filteredArray
-            
+
             for _ in range(4-len(filteredArray)):
-                compressedArray.insert(0, None)    
-                    
+                compressedArray.insert(0, None)
+
         return compressedArray
 
     def _move(self, direction: str) -> None:
@@ -313,12 +314,12 @@ class Game:
         """
 
         self._canContinue()
-        
+
         if direction == self.LEFT or direction == self.RIGHT:
             for i, row in enumerate(self.board):
                 self.board[i] = self._compressArray(row, direction)
 
-        
+
         elif direction == self.DOWN or direction == self.UP:
             for col in range(4):
                 column: List[int] = []
@@ -330,16 +331,16 @@ class Game:
 
                 for row in range(4):
                     self.board[row][col] = newColumn[row]
-        
+
         if self.hasOpenSpace:
             self._placeRandomTile()
-        
+
         self.numMoves += 1
 
     """
         Public methods
     """
-    
+
     # Movement methods
     def left(self) -> None:
         """
@@ -390,7 +391,7 @@ class Game:
         """
 
         return self.board
-    
+
     def getNumMoves(self) -> int:
         """Getter for the current number of moves.
 

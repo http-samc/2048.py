@@ -32,7 +32,7 @@ def runTest():
     print(game)
 
     while True:
-        
+
         try:
             choice = int(input("Choose a movement:\n\t[1] Left\n\t[2] Right\n\t[3] Up\n\t[4] Down\n\nChoice: "))
 
@@ -45,12 +45,12 @@ def runTest():
 
         except Exception as e:
 
-            if type(e) is GameLostException:
+            if isinstance(e, GameLostException):
                 print(f"Game lost after {e.numMoves} moves!\nFinal Board:")
                 print(e.board)
                 break
 
-            elif type(e) is GameWonException:
+            elif isinstance(e, GameWonException):
                 print(f"Game lost after {e.numMoves} moves!\nFinal Board:")
                 print(e.board)
                 break
