@@ -45,8 +45,7 @@
 from random import choices
 from typing import List, Tuple
 
-from Py2048_Engine.Exceptions import GameLostException
-from Py2048_Engine.Exceptions import GameWonException
+from Py2048_Engine.Exceptions import GameLostException, GameWonException
 
 class Game:
 

@@ -1,7 +1,7 @@
 # Py2048-Engine
 A pure 🐍 , fully type hinted, well documented 2048 Engine that just works.
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/580e4c8cf7554264b44faa7216479cbe)](https://www.codacy.com/gh/http-samc/2048.py/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=http-samc/2048.py&amp;utm_campaign=Badge_Grade) [![PyPI version](https://badge.fury.io/py/Py2048-Engine.svg)](https://badge.fury.io/py/Py2048-Engine)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/580e4c8cf7554264b44faa7216479cbe)](https://www.codacy.com/gh/http-samc/2048.py/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=http-samc/2048.py&amp;utm_campaign=Badge_Grade) [![PyPI version](https://badge.fury.io/py/Py2048-Engine.svg)](https://badge.fury.io/py/Py2048-Engine) ![Downloads](https://www.smrth.dev/api/pypi-downloads/badge/cleanify)
 
 ## Installation
 
@@ -16,7 +16,7 @@ Alternatively, you can clone the repo:
 ## Getting Started
 
 ### If you're looking to play the game itself
-You can get a quick and intuivite introduction to the engine by using the built-in game tester. First import `runTest()` from the package and call it to get started.
+You can get a quick and intuitive introduction to the engine by using the built-in game tester. First import `runTest()` from the package and call it to get started.
 ```Python
 >>> from Py2048_Engine.Test import runTest
 >>> runTest()
@@ -77,9 +77,9 @@ Eventually, you'll either win or lose. To handle this, you want to catch some `E
 
 All thrown `Exceptions` inherit from `Py2048_Engine.Exceptions.GameException`, with `Py2048_Engine.Exceptions.GameWonException` signifing a game win and `Py2048_Engine.Exceptions.GameLostException` signifing a game loss.
 
-`GameException` and its children have a few important attributes, especially if you're prototyping.
+`GameException` and its children have a few important attributes, which are important if you're doing scaled tests.
 
-| Attribute | Desc |
+| Attribute | Description |
 | --- | --- |
 | `message` | a message describing why the `GameException` was thrown. |
 | `numMoves` | the number of moves taken before the `GameException` was thrown. |
@@ -103,10 +103,10 @@ while True:
         # At this point we have access to the final board,
         # final number of moves, and an exit message.
 
-        if type(e) is GameWonException:
+        if isinstance(e, GameWonException):
             print("YOU WON!!!")
 
-        elif type(e) is GameLostException:
+        elif isinstance(GameLostException):
             print("Better luck next time :(")
 
         print(e.message)

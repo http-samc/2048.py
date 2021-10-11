@@ -21,8 +21,7 @@
 """
 
 from Py2048_Engine.Game import Game
-from Py2048_Engine.Exceptions import GameLostException
-from Py2048_Engine.Exceptions import GameWonException
+from Py2048_Engine.Exceptions import GameLostException, GameWonException
 
 def runTest():
     """Run a basic CLI test of the Py2048 Engine."""

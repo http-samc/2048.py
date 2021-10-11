@@ -150,10 +150,6 @@ Run a basic CLI test of the Py2048 Engine.
 ### Py2048_Engine.Exceptions.`GameException` [class] [inherits: `Exception`]
 Base Exception raised when a key event happens within a Game.
 
-Attrs:
-    board (List[List[int]]): the final board before the exception was thrown.
-    numMoves (int): the number of moves taken before the exception was thrown.
-    message (str): a description of the exception.
 <details style='color: #333333'><summary>Methods</summary><p>
 
 #### GameException.`__init__`
